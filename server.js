@@ -129,10 +129,14 @@ app.post("/getDiagnosis", (req, res) => {
 });
 
 app.delete("/logout", (req, res) => {
-    req.logout();
-    res.redirect("/login");
+    req.logout((err) => {
+        if (err) {
+            console.error("Error during logout:", err);
+            req.flash('error', 'Failed to logout. Please try again.');
+        }
+        res.redirect("/login");
+    });
 });
-
 function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
