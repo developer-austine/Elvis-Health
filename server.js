@@ -77,9 +77,7 @@ app.post("/register", async (req, res) => {
     }
 });
 
-app.get("/index1", (req, res) => {
-    res.render("index1.ejs");
-});
+
 
 app.post("/getDiagnosis", (req, res) => {
     const userSymptoms = req.body.userSymptoms;
