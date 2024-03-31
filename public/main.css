@@ -1,0 +1,32 @@
+body {
+    background: url(https://cdn.pixabay.com/photo/2022/06/24/13/57/woman-7281733_960_720.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+}
+textarea{
+    resize: none;
+
+}
+
+#diagnosis,#getDiagnosisForm {
+    background-color: transparent;
+    backdrop-filter: blur(5rem);
+    color: black;
+    border-radius: 5rem;
+}
+
+
+
+.montserrat-brand {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+}
+
+#userSymptoms::placeholder{
+    font-size: 1.2rem;
+
+}
+

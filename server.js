@@ -30,16 +30,30 @@ initializePassport(
 
 app.set('view engine', 'ejs'); // Set up EJS as the template engine
 
+app.use(express.static("public"))
 app.use(express.urlencoded({ extended: false }));
 app.use(flash());
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false, // Do not resave session if not modified
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: { maxAge:30* 60 * 1000 }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride("_method"));
+
+// Middleware to check session expiration
+function checkSessionExpiration(req, res, next) {
+    if (req.isAuthenticated() && req.session.cookie.expires < new Date()) {
+        req.logout();
+    }
+    next();
+}
+
+// Apply the middleware to check session expiration
+app.use(checkSessionExpiration);
+
 
 app.get("/", checkAuthenticated, function(req, res) {
     res.render("index.ejs", { name: req.user.name, userDiagnosis: req.session.userDiagnosis });
@@ -69,7 +83,7 @@ app.post("/register", async (req, res) => {
             password: hashedPassword
         };
         users.push(newUser);
-        console.log(newUser);
+        console.table(newUser);
         res.redirect("/login");
     } catch (e) {
         console.log(e);
