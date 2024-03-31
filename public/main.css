@@ -1,8 +1,23 @@
 body {
-    background: url(https://cdn.pixabay.com/photo/2022/06/24/13/57/woman-7281733_960_720.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
+    /* background: url(https://cdn.pixabay.com/photo/2022/06/24/13/57/woman-7281733_960_720.jpg); */
+    /* background-repeat: no-repeat; */
+    /* background-size: cover; */
+    /* overflow-x: hidden; */
     min-height: 100vh;
+    background-repeat: no-repeat;
+    background-color: hsl(218, 41%, 15%);
+    background-image: radial-gradient(100vw circle at 0% 0%,
+        hsl(218, 41%, 35%) 15%,
+        hsl(218, 41%, 30%) 35%,
+        hsl(218, 41%, 20%) 75%,
+        hsl(218, 41%, 19%) 80%,
+        transparent 100%),
+        radial-gradient(100vw circle at 100% 100%,
+        hsl(218, 41%, 45%) 15%,
+        hsl(218, 41%, 30%) 35%,
+        hsl(218, 41%, 20%) 75%,
+        hsl(218, 41%, 19%) 80%,
+        transparent 100%);
 }
 textarea{
     resize: none;
@@ -30,3 +45,52 @@ textarea{
 
 }
 
+/* Login page */
+.background-radial-gradient {
+    background-repeat: no-repeat;
+    background-color: hsl(218, 41%, 15%);
+    background-image: radial-gradient(100vw circle at 0% 0%,
+        hsl(218, 41%, 35%) 15%,
+        hsl(218, 41%, 30%) 35%,
+        hsl(218, 41%, 20%) 75%,
+        hsl(218, 41%, 19%) 80%,
+        transparent 100%),
+        radial-gradient(100vw circle at 100% 100%,
+        hsl(218, 41%, 45%) 15%,
+        hsl(218, 41%, 30%) 35%,
+        hsl(218, 41%, 20%) 75%,
+        hsl(218, 41%, 19%) 80%,
+        transparent 100%);
+}
+
+#radius-shape-1 {
+    border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+    height: 220px;
+    width: 220px;
+    top: 12%;
+    left: 50%;
+    background: radial-gradient(#44006b, #ad1fff);
+    overflow: hidden;
+    filter: blur(3rem);
+    z-index: -10;
+}
+
+#radius-shape-2 {
+    border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+    bottom: 10%;
+    right: 20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(#44006b, #ad1fff);
+    overflow: hidden;
+    filter: blur(3rem);
+
+   
+    
+}
+
+.bg-glass {
+    background-color: hsla(0, 0%, 100%, 0.6) !important;
+    /* background-color: transparent; */
+    backdrop-filter: blur(2rem);
+}
