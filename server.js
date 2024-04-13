@@ -10,6 +10,7 @@ const initializePassport = require("./passport-config");
 const flash = require("express-flash");
 const session = require("express-session");
 const methodOverride = require("method-override");
+const geodist = require("geodist");
 
 // ? Mongo
 const { connectToDb, getDb } = require("./db");
@@ -239,3 +240,77 @@ function checkAuthenticated(req, res, next) {
 	}
 	res.redirect("/login");
 }
+
+// ? THE HOSPITAL PARTS
+
+// Initialize the server after connecting to the database
+app.get("/hospitals", async (req, res) => {
+	try {
+		const hospitals = await db.collection("hospitalDetails").find().toArray();
+		res.status(200).json(hospitals);
+	} catch (error) {
+		res.status(500).json({ error: "Could not fetch the documents" });
+	}
+});
+
+// Route to get hospital details for a specific hospital
+app.get("/hospital/:id", async (req, res) => {
+	try {
+		const hospital = await db
+			.collection("hospitalDetails")
+			.findOne({ _id: new ObjectId(req.params.id) });
+		if (hospital) {
+			res.status(200).json(hospital);
+		} else {
+			res.status(404).json({ error: "Hospital not found" });
+		}
+	} catch (error) {
+		res.status(500).json({ error: "Could not fetch the document" });
+	}
+});
+
+// Route to render the landing page for getting location
+app.get("/landingGetLocation", (req, res) => {
+	res.render("index.ejs");
+});
+
+// Route to get hospitals within proximity
+app.get("/hospitals/proximity", async (req, res) => {
+	const { longitude, latitude } = req.query;
+	console.log(req.query);
+
+	try {
+		const hospitals = await db.collection("hospitalDetails").find().toArray();
+		const closeHospitals = hospitals
+			.filter(
+				(hospital) =>
+					hospital.properties.name &&
+					hospital.properties.amenity !== null &&
+					hospital.properties.amenity !== "*" &&
+					hospital.properties.amenity === "hospital"
+			)
+			.map((hospital) => {
+				const { coordinates } = hospital.geometry;
+				const dist = geodist(
+					{ lat: coordinates[1], lon: coordinates[0] },
+					{ lat: parseFloat(latitude), lon: parseFloat(longitude) },
+					{ unit: "Km", exact: true }
+				).toFixed(3);
+				return {
+					id: hospital._id,
+					name: hospital.properties.name,
+					amenity: hospital.properties.amenity,
+					location: coordinates,
+					proximity: dist,
+				};
+			})
+			.filter((hospital) => hospital.proximity < 5)
+
+			.sort((a, b) => a.proximity - b.proximity)
+			.slice(0, 4);
+
+		res.status(200).json(closeHospitals);
+	} catch (error) {
+		res.status(500).json({ error: "Could not fetch the documents" });
+	}
+});

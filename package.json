@@ -17,6 +17,7 @@
     "express": "^4.19.2",
     "express-flash": "^0.0.2",
     "express-session": "^1.18.0",
+    "geodist": "^0.2.1",
     "method-override": "^3.0.0",
     "mongodb": "^6.5.0",
     "passport": "^0.7.0",

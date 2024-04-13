@@ -1,46 +1,75 @@
 <%- include("partials/header.ejs") -%>
 
-<main class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+<main
+	class="container-fluid d-flex justify-content-center align-items-center"
+	style="min-height: 100vh"
+>
 	<%- include("partials/background.ejs") -%>
 
-    <section class="container row d-flex justify-content-between">
-        <div class="col-lg-6 col-md-12 col-sm-12">
-            <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
-                Welcome to <br />
-                <span style="color: hsl(218, 81%, 75%)">Info_Health</span>
-            </h1>
-            <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
-                Welcome to our website, dedicated to empowering individuals with knowledge about their health. Are you experiencing troubling symptoms but unsure of their significance? Our platform is here to provide clarity and support. By simply inputting your symptoms into our intuitive interface, we offer personalized insights and potential diagnoses based on the information provided. Whether it's a persistent cough, unexplained fatigue, or any other health concern, our advanced algorithm sifts through vast medical data to provide you with likely conditions you may be experiencing.
-            </p>
-        </div>
+	<section class="container row d-flex justify-content-between">
+		<div class="col-lg-6 col-md-12 col-sm-12">
+			<h1
+				class="my-5 display-5 fw-bold ls-tight"
+				style="color: hsl(218, 81%, 95%)"
+			>
+				Welcome to <br />
+				<span style="color: hsl(218, 81%, 75%)">Info_Health</span>
+			</h1>
+			<p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
+				Welcome to our website, dedicated to empowering individuals with
+				knowledge about their health. Are you experiencing troubling symptoms
+				but unsure of their significance? Our platform is here to provide
+				clarity and support. By simply inputting your symptoms into our
+				intuitive interface, we offer personalized insights and potential
+				diagnoses based on the information provided. Whether it's a persistent
+				cough, unexplained fatigue, or any other health concern, our advanced
+				algorithm sifts through vast medical data to provide you with likely
+				conditions you may be experiencing.
+			</p>
+		</div>
 
-        <div class="col-lg-5 col-md-12 col-sm-12 bg-glass card p-0">
-            <h1 class="card-header">Login</h1>
-            <form action="/login" class="card-body" method="POST">
-                <% if(messages && messages.error){ %>
-                <div class="alert alert-danger">
-                    <strong><%= messages.error %></strong>
-                </div>
-                <% } %>
+		<div class="col-lg-5 col-md-12 col-sm-12 bg-glass card p-0">
+			<h1 class="card-header">Login</h1>
 
-                <div class="form-outline mb-4">
-                    <label class="form-label" for="form3Example3">Email address</label>
-                    <input type="email" name="email" id="form3Example3" class="form-control" required />
-                </div>
+			<form action="/login" class="card-body" method="POST">
+				<% if(messages && messages.error){ %>
+				<div class="alert alert-danger">
+					<strong><%= messages.error %></strong>
+				</div>
+				<% } %>
 
-                <div class="form-outline mb-4">
-                    <label class="form-label" for="form3Example4">Password</label>
-                    <input type="password" name="password" id="form3Example4" class="form-control" required />
-                </div>
+				<div class="form-outline mb-4">
+					<label class="form-label" for="form3Example3">Email address</label>
+					<input
+						type="email"
+						name="email"
+						id="form3Example3"
+						class="form-control"
+						required
+					/>
+				</div>
 
-                <button type="submit" class="btn btn-primary btn-lg btn-block mb-4">Sign In</button>
+				<div class="form-outline mb-4">
+					<label class="form-label" for="form3Example4">Password</label>
+					<input
+						type="password"
+						name="password"
+						id="form3Example4"
+						class="form-control"
+						required
+					/>
+				</div>
 
-                <div class="text-center">
-                    <p>Don't have an account yet? <a href="/register">Register</a></p>
-                </div>
-            </form>
-        </div>
-    </section>
+				<button type="submit" class="btn btn-primary btn-lg btn-block mb-4">
+					Sign In
+				</button>
+
+				<div class="text-center">
+					<p>Don't have an account yet? <a href="/register">Register</a></p>
+				</div>
+			</form>
+		</div>
+	</section>
 </main>
 
 <%- include("partials/footer.ejs") -%>
