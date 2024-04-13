@@ -14,6 +14,10 @@
 		<link rel="stylesheet" href="vendor/nouislider/nouislider.min.css" />
 		<!-- Style css -->
 		<link href="css/style.css" rel="stylesheet" />
+		<link
+			href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+			rel="stylesheet"
+		/>
 	</head>
 	<body>
 		<!--*******************
@@ -206,10 +210,10 @@
 								data-bs-toggle="dropdown"
 							>
 								<img src="images/ion/man (1).png" width="20" alt="" />
-								<div class="header-info ms-3">
+								<div class="header-info ms-3 overflow-hidden">
 									<span class="font-w600">Hi,<b><%= name %></b></span>
 
-									<small class="text-end font-w400">xyz@gmail.com</small>
+									<small class="text-end font-w400"><%= email %></small>
 								</div>
 							</a>
 						</li>
@@ -231,12 +235,7 @@
 								<span class="nav-text">Charts</span>
 							</a>
 						</li>
-						<li>
-							<a href="javascript:void()" aria-expanded="false">
-								<i class="flaticon-086-star"></i>
-								<span class="nav-text">Bootstrap</span>
-							</a>
-						</li>
+
 						<li>
 							<a href="javascript:void()" aria-expanded="false">
 								<i class="flaticon-045-heart"></i>
@@ -256,15 +255,18 @@
 							</a>
 						</li>
 						<li>
-							<a href="javascript:void()" aria-expanded="false">
-								<i class="flaticon-043-menu"></i>
-								<span class="nav-text">Table</span>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void()" aria-expanded="false">
-								<i class="flaticon-022-copy"></i>
-								<span class="nav-text">Pages</span>
+							<a aria-expanded="false">
+								<i class='bx bx-log-out-circle'></i>
+								<span class="nav-text">
+									<form action="/logout" method="post" class="reset border-0">
+										<input
+											type="submit"
+											value="Logout"
+											class="nav-text reset border-0"
+										/>
+									</span>
+									</form
+									>
 							</a>
 						</li>
 					</ul>
@@ -281,6 +283,7 @@
 				<!-- row -->
 				<div class="container-fluid">
 					<div class="row invoice-card-row">
+						<!--  ? Start of Nearby Hospitals -->
 						<div class="col-xl-3 col-xxl-3 col-sm-6">
 							<div class="card bg-warning invoice-card">
 								<div class="card-body d-flex">
@@ -367,10 +370,13 @@
 								</div>
 							</div>
 						</div>
+						<!-- ? End of Nearby Hospitals -->
 					</div>
+
 					<div class="row">
 						<div class="col-xl-9 col-xxl-12">
 							<div class="card">
+								<!-- ?Start of  Call ambulance -->
 								<div class="card-body">
 									<div class="row align-items-center">
 										<div class="col-xl-6">
@@ -436,6 +442,7 @@
 							</div>
 						</div>
 						<div class="col-xl-3 col-xxl-5">
+							<!-- ?Start of our Activity stats -->
 							<div class="card">
 								<div class="card-header pb-0 border-0">
 									<div>

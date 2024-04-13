@@ -11,6 +11,21 @@ const flash = require("express-flash");
 const session = require("express-session");
 const methodOverride = require("method-override");
 
+// ? Mongo
+const { connectToDb, getDb } = require("./db");
+const { ObjectId } = require("mongodb");
+app.use(express.json());
+
+let db;
+connectToDb((err) => {
+	if (!err) {
+		app.listen(3000, () => {
+			console.log("Server is live at port 3000!");
+		});
+		db = getDb();
+	}
+});
+
 const {
 	GoogleGenerativeAI,
 	HarmCategory,
@@ -21,12 +36,31 @@ const MODEL_NAME = "gemini-1.0-pro";
 const API_KEY = process.env.GOOGLE_API_KEY; // Use your actual API key from environment variables
 
 const users = [];
+function importUserDetails() {
+	db.collection("userDetails")
+		.find()
+		.toArray()
+		.then((usersArray) => {
+			users.splice(0, users.length, ...usersArray);
+			// console.table(users);
+			// Optionally, if you need to update passport with the new users, you can reinitialize it
+			initializePassport(
+				passport,
+				(email) => users.find((user) => user.email === email),
+				(id) => users.find((user) => user.id === id)
+			);
+		})
+		.catch((error) => {
+			console.log(error);
+			// Handle error
+		});
+}
 
-initializePassport(
-	passport,
-	(email) => users.find((user) => user.email === email),
-	(id) => users.find((user) => user.id === id)
-);
+// initializePassport(
+// 	passport,
+// 	(email) => users.find((user) => user.email === email),
+// 	(id) => users.find((user) => user.id === id)
+// );
 
 app.set("view engine", "ejs"); // Set up EJS as the template engine
 
@@ -57,7 +91,7 @@ function checkSessionExpiration(req, res, next) {
 app.use(checkSessionExpiration);
 
 app.get("/", checkAuthenticated, function (req, res) {
-	res.render("index.ejs", { name: req.user.name });
+	res.render("index.ejs", { name: req.user.name, email: req.user.email });
 });
 // app.get("/", checkAuthenticated, function (req, res) {
 // 	res.render("index.ejs", {
@@ -67,10 +101,13 @@ app.get("/", checkAuthenticated, function (req, res) {
 // });
 
 app.get("/login", function (req, res) {
+	importUserDetails();
+
 	res.render("login.ejs");
 });
 
 app.get("/register", function (req, res) {
+	importUserDetails();
 	res.render("register.ejs");
 });
 
@@ -85,6 +122,15 @@ app.post(
 
 app.post("/register", async (req, res) => {
 	try {
+		const existingUser = await db
+			.collection("userDetails")
+			.findOne({ email: req.body.email });
+		if (existingUser) {
+			// Email already exists, redirect to login page
+
+			return res.redirect("/login");
+		}
+
 		const hashedPassword = await bcrypt.hash(req.body.password, 10);
 		const newUser = {
 			id: Date.now().toString(),
@@ -92,7 +138,19 @@ app.post("/register", async (req, res) => {
 			email: req.body.email,
 			password: hashedPassword,
 		};
-		users.push(newUser);
+		db.collection("userDetails")
+			.insertOne(newUser)
+			.then((result) => {
+				console.log(result);
+				// res.status(201).json(result);
+			})
+			.catch((err) => {
+				console.log(err);
+				// res.status(500).json({ err: "Could not create a new document" });
+			});
+
+		// users.push(newUser);
+		importUserDetails();
 		// console.table(newUser);
 		res.redirect("/login");
 	} catch (e) {
@@ -165,12 +223,13 @@ app.post("/getDiagnosis", (req, res) => {
 	runChat();
 });
 
-app.delete("/logout", (req, res) => {
+app.post("/logout", (req, res) => {
 	req.logout((err) => {
 		if (err) {
 			console.error("Error during logout:", err);
 			req.flash("error", "Failed to logout. Please try again.");
 		}
+
 		res.redirect("/login");
 	});
 });
@@ -180,7 +239,3 @@ function checkAuthenticated(req, res, next) {
 	}
 	res.redirect("/login");
 }
-
-app.listen(3000, function () {
-	console.log("Server is up and running on port 3000");
-});
