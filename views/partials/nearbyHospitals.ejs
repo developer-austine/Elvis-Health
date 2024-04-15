@@ -1,4 +1,5 @@
 <div class="container-fluid">
+	<h2 class="text-warning">Nearby Hospitals</h2>
 	<div id="nearbyHospitalsContainer" class="row invoice-card-row">
 		<!-- Placeholder element -->
 		<div class="col-xl-3 col-xxl-3 col-sm-6">
@@ -45,13 +46,13 @@
 <script>
 	getNearbyHospitals();
 
-	function getNearbyHospitals() {
+	async function getNearbyHospitals() {
 		if ("geolocation" in navigator) {
 			navigator.geolocation.getCurrentPosition(
 				function (position) {
 					const latitude = position.coords.latitude;
 					const longitude = position.coords.longitude;
-					const url = `/hospitals/proximity?latitude=${latitude}&longitude=${longitude}`;
+					const url = `/api/hospitals/proximity?latitude=${latitude}&longitude=${longitude}&amenity=hospital&more=4`;
 
 					fetch(url)
 						.then((response) => {
@@ -75,26 +76,17 @@
 
 								// Format the time
 								if (hours >= 1) {
-									return hours + " hours," + minutes + " minutes";
+									return hours + " h," + minutes + " min";
 								} else {
-									return minutes + " minutes";
+									return minutes + " min";
 								}
 							}
-
-							// Example usage:
-							const distance = 100; // Distance in kilometers
-							const speed = 50; // Speed in kilometers per hour
-							const timeTaken = calculateTime(distance, speed);
-							console.log("Time taken:", timeTaken);
 
 							data.forEach((hospital) => {
 								const row = document.createElement("div");
 								const drivingTime = calculateTime(hospital.proximity, 30);
 								const publicTime = calculateTime(hospital.proximity, 20);
 								const walkingTime = calculateTime(hospital.proximity, 5);
-								//   const times = ()=>{
-								//       if (drivingTime<1)
-								//   }
 
 								row.classList.add("col-xl-3", "col-xxl-3", "col-sm-6");
 								row.innerHTML = `
@@ -105,8 +97,9 @@
 																<div class="icon me-2 d-flex justify-content-center align-items-center fs-1">
 																	<i class="bi bi-hospital-fill fs-2 text-white"></i>
 																</div>
-																<div class="overflow-hidden text-nowrap">
-																	<h2 class="text-white invoice-num fs-4">${hospital.name}</h2>
+																<div class="overflow-hidden text-nowrap " >
+																	
+																		<h2  class="text-white  invoice-num fs-4">${hospital.name}</h2>
 																	<p class="text-white m-0 p-0">${hospital.amenity}</p>
 																	<p class="text-white fs-4 m-0 p-0"><i class='bx bx-location-plus fs-2 p-1 text-warning'></i><u>${hospital.proximity} Km</u></p>
 																	<p class="text-white m-0 p-0 card-footer border-0 shadow-md text-nowrap fs-6">
@@ -114,9 +107,14 @@
 																		<span id="publicTransTime"><i class='bx bxs-bus mx-1 text-warning'></i>${publicTime}</span>
 																		<span id="walkingTime"><i class='bx bx-walk mx-1 text-warning'></i>${walkingTime}</span>
 																	</p>
-																	<p class="text-warning fs-3 m-0 p-0">
-																		<span><i class='bx bxs-direction-right fs-3 mx-1'></i></span>Get Direction
-																	</p>
+																		<button id="directionBtn" class="btn btn-secondary  py-0 mx-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+																			<div class="text-white-emphasis  fs-3 m-0 p-0">
+																		<span><i class='bx bxs-direction-right text-warning fs-3 mx-1 py-0 mx-0'></i></span>View Location 
+
+																		</button>
+																		
+																		</div>
+																	
 																</div>
 															</div>
 														</button>
