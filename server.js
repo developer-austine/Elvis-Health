@@ -62,7 +62,7 @@ function importUserDetails() {
 			);
 		})
 		.catch((error) => {
-			console.log(error);
+			console.log("There is an Error: " + error);
 			// Handle error
 		});
 }
@@ -108,7 +108,7 @@ app.get("/", checkAuthenticated, function (req, res) {
 	} else if (req.user.role === "doctor") {
 		res.send("Hello doctor");
 	} else {
-		res.send("There was a problem in the request");
+		res.send(req.user.email + "Is not a doctor");
 	}
 });
 
@@ -141,10 +141,7 @@ app.post("/login", function (req, res, next) {
 		authenticationOptions.successRedirect = "/";
 	} else if (req.body.role === "doctor") {
 		authenticationOptions.successRedirect = "/doctors";
-	} else {
-		authenticationOptions.successRedirect = "/";
 	}
-
 	passport.authenticate("local", authenticationOptions)(req, res, next);
 });
 
