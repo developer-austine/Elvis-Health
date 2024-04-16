@@ -108,7 +108,7 @@ app.get("/", checkAuthenticated, function (req, res) {
 	} else if (req.user.role === "doctor") {
 		res.send("Hello doctor");
 	} else {
-		res.send(req.user.email + "Is not a doctor");
+		res.send("There was an error in the login");
 	}
 });
 
@@ -161,9 +161,11 @@ app.post("/register", async (req, res) => {
 			id: Date.now().toString(),
 			name: req.body.name,
 			email: req.body.email,
+			role: req.body.role,
 			password: hashedPassword,
 		};
-		db.collection("userDetails")
+		if(newUser.role==="user"){
+			db.collection("userDetails")
 			.insertOne(newUser)
 			.then((result) => {
 				console.log(result);
@@ -173,6 +175,22 @@ app.post("/register", async (req, res) => {
 				console.log(err);
 				// res.status(500).json({ err: "Could not create a new document" });
 			});
+
+
+		}else if (newUser.role==="doctor"){
+			db.collection("doctorsDetails")
+			.insertOne(newUser)
+			.then((result) => {
+				console.log(result);
+				// res.status(201).json(result);
+			})
+			.catch((err) => {
+				console.log(err);
+				// res.status(500).json({ err: "Could not create a new document" });
+			});
+
+		}
+	
 
 		// users.push(newUser);
 		importUserDetails();
